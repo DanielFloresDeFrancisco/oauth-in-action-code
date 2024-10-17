@@ -74,10 +74,38 @@ app.get('/favorites', getAccessToken, requireAccessToken, function(req, res) {
 	/*
 	 * Get different user information based on the information of who approved the token
 	 */
-	
-	var unknown = {user: 'Unknown', favorites: {movies: [], foods: [], music: []}};
-	res.json(unknown);
-
+    var favoriteList = {
+		'movies': [],
+		'foods': [],
+		'music': []
+	};
+	if (req.access_token.user == 'alice') {
+		if (__.contains(req.access_token.scope, "foods")) {
+			favoriteList.foods = aliceFavorites.foods;
+		}
+		if (__.contains(req.access_token.scope, "movies")) {
+			favoriteList.movies = aliceFavorites.movies;
+		}	
+		if (__.contains(req.access_token.scope, "music")) {
+			favoriteList.music = aliceFavorites.music;
+		}	
+		res.json({user: 'Alice', favorites: favoriteList});
+		
+	} else if (req.access_token.user == 'bob') {
+		if (__.contains(req.access_token.scope, "foods")) {
+			favoriteList.foods = bobFavorites.foods;
+		}
+		if (__.contains(req.access_token.scope, "movies")) {
+			favoriteList.movies = bobFavorites.movies;
+		}
+		if (__.contains(req.access_token.scope, "music")) {
+			favoriteList.music = bobFavorites.music;
+		}
+		res.json({user: 'Bob', favorites: favoriteList});
+	} else {
+		var unknown = {user: 'Unknown', favorites: {movies: [], foods: [], music: []}};
+		res.json(unknown);
+	}
 });
 
 var server = app.listen(9002, 'localhost', function () {
