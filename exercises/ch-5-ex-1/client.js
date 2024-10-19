@@ -116,7 +116,12 @@ app.get("/callback", function(req, res){
 		}
 		
 		scope = body.scope;
+		var issued_at = body.issued_at;
+		var expires_at = body.expires_at;
 		console.log('Got scope: %s', scope);
+		console.log("Expiration time: %s", issued_at);
+		console.log("Expires in %s ms", expires_at);
+
 
 		res.render('index', {access_token: access_token, refresh_token: refresh_token, scope: scope});
 	} else {
